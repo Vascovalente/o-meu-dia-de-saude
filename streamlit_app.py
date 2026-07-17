@@ -1,3 +1,5 @@
+
+
 # -----------------------------------------------------------
 # O Meu Dia de Saúde - app para ajudar pessoas mais velhas
 # a organizar a medicação e as consultas.
@@ -153,6 +155,10 @@ with aba_gerir:
     st.title("⚙️ Configurar")
     st.write("Esta parte é para um familiar preencher os medicamentos e as consultas.")
  
+    # Mostrar mensagem de sucesso da última ação (sobrevive ao redesenho)
+    if "mensagem" in st.session_state:
+        st.success(st.session_state.pop("mensagem"))
+ 
     # ----- Adicionar medicamento -----
     st.header("Adicionar medicamento")
     with st.form("novo_med", clear_on_submit=True):
@@ -164,7 +170,8 @@ with aba_gerir:
                 st.session_state.medicamentos.append(
                     {"nome": nome.strip(), "dose": dose.strip() or "1 comprimido", "hora": hora}
                 )
-                st.success(f"'{nome}' adicionado!")
+                st.session_state.mensagem = f"'{nome}' adicionado!"
+                st.rerun()  # redesenhar já, para aparecer na aba "O MEU DIA"
             else:
                 st.error("Escreva o nome do medicamento.")
  
@@ -191,7 +198,8 @@ with aba_gerir:
                 st.session_state.consultas.append(
                     {"descricao": descricao.strip(), "data": data_consulta}
                 )
-                st.success("Consulta adicionada!")
+                st.session_state.mensagem = "Consulta adicionada!"
+                st.rerun()  # redesenhar já, para aparecer na aba "O MEU DIA"
             else:
                 st.error("Escreva a descrição da consulta.")
  
@@ -209,4 +217,8 @@ with aba_gerir:
 # ---------- Rodapé ----------
 st.caption("Feito com carinho em Python e Streamlit · Vasco Valente")
  
+
+
+
+
 
